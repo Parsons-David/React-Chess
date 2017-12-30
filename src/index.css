@@ -1,0 +1,38 @@
+.Header {
+  text-align: center;
+  border-bottom: solid;
+  margin-bottom: 10px;
+}
+
+.game-board {
+  text-align: center;
+  display: inline-block;
+  width: 60%;
+}
+
+.game-info {
+  display: inline-block;
+  width: 40%;
+  text-align: center;
+}
+
+.board-row:after {
+  clear: both;
+  content: "";
+  display: table;
+}
+
+.Square {
+  background: #fff;
+  border: 1px solid #999;
+  float: left;
+  font-size: 24px;
+  font-weight: bold;
+  line-height: 34px;
+  height: 34px;
+  margin-right: -1px;
+  margin-top: -1px;
+  padding: 0;
+  text-align: center;
+  width: 34px;
+}
