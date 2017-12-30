@@ -4,6 +4,11 @@
   margin-bottom: 10px;
 }
 
+.Game {
+  display: inline-flex;
+  width: 100%;
+}
+
 .game-board {
   text-align: center;
   display: inline-block;
@@ -11,9 +16,14 @@
 }
 
 .game-info {
-  display: inline-block;
+  height: 100%;
   width: 40%;
+  display: inline-block;
   text-align: center;
+}
+
+.board-row {
+  display: inline;
 }
 
 .board-row:after {
@@ -22,9 +32,14 @@
   display: table;
 }
 
+.Board {
+  display: inline-block;
+  border: 5px solid grey;
+}
+
 .Square {
-  background: #fff;
-  border: 1px solid #999;
+  border: 1px solid;
+  /*border-color: black;*/
   float: left;
   font-size: 24px;
   font-weight: bold;
@@ -35,4 +50,12 @@
   padding: 0;
   text-align: center;
   width: 34px;
+}
+
+.Square-main{
+  background-color: green;
+}
+
+.Square-alt{
+  background-color: orange;
 }

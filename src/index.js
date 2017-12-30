@@ -3,31 +3,35 @@ import ReactDOM from 'react-dom';
 import './index.css';
 
 function Square(props) {
+  let classes = "Square";
+  classes += ( props.isMain ? " Square-main" : " Square-alt" );
   return (
-    <button className="Square">
+    <button className={classes}>
     </button>
   );
 }
 
 class Board extends React.Component{
 
-  renderSquare(){
-    return <Square/>
+  renderSquare(isMain){
+    return <Square isMain={isMain}/>
   }
 
   render(){
     let board = [];
+    var isMain = true;
     for(var i = 0; i < 8; i++){
       let row = [];
       for(var j = 0; j < 8; j++){
-        row.push(this.renderSquare());
+        row.push(this.renderSquare(isMain));
+        isMain = !isMain;
       }
+      isMain = !isMain;
       board.push(<div key={i} className="board-row">{row}</div>);
     }
 
     return(
       <div className="Board">
-        <p><strong>Board</strong></p>
         {board}
       </div>
     );
@@ -39,6 +43,7 @@ class Game extends React.Component{
     return(
       <div className="Game">
         <div className="game-board">
+          <p><strong>Board</strong></p>
           <Board/>
         </div>
         <div className="game-info">
