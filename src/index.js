@@ -54,7 +54,7 @@ class Header extends React.Component{
     return(
       <div className="Header">
         <h1>React Chess</h1>
-        <p><a href="http://davidparsons.io/React-Chess/">Source</a></p>
+        <p><a href="https://github.com/Parsons-David/React-Chess">Source</a></p>
       </div>
     );
   }
