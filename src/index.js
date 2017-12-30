@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+// TODO : Import Better
 import bb from './img/bb.png';
 import bk from './img/bk.png';
 import bn from './img/bn.png';
