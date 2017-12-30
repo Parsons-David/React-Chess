@@ -52,11 +52,11 @@
   width: 34px;
 }
 
-.Square-main{
-  background-color: green;
+.Square-primary{
+  background-color: #B5E533;
 }
 
-.Square-alt{
+.Square-accent{
   background-color: orange;
 }
 

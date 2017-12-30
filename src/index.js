@@ -16,7 +16,7 @@ import wr from './img/wr.png';
 
 function Square(props) {
   let classes = "Square";
-  classes += ( props.isMain ? " Square-main" : " Square-alt" );
+  classes += ( props.isPrimary ? " Square-primary" : " Square-accent" );
   return (
     <button className={classes}>
       <img src={props.piece} alt="" className="piece"/>
@@ -27,7 +27,7 @@ function Square(props) {
 class Board extends React.Component{
 
   renderSquare(props){
-    return <Square piece={props.piece} isMain={props.isMain}/>
+    return <Square piece={props.piece} isPrimary={props.isPrimary}/>
   }
 
   render(){
@@ -42,17 +42,17 @@ class Board extends React.Component{
       [wr, wb, wn, wk, wq, wn, wb, wr],
     ];
     let board = [];
-    var isMain = true;
+    var isPrimary = true;
     for(var i = 0; i < 8; i++){
       let row = [];
       for(var j = 0; j < 8; j++){
         row.push(this.renderSquare({
-          isMain : isMain,
+          isPrimary : isPrimary,
           piece : pieces[i][j],
         }));
-        isMain = !isMain;
+        isPrimary = !isPrimary;
       }
-      isMain = !isMain;
+      isPrimary = !isPrimary;
       board.push(<div key={i} className="board-row">{row}</div>);
     }
 
