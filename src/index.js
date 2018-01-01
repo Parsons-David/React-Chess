@@ -1,19 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import {GameEngine} from './Chess.js'
 import './index.css';
-// TODO : Import Better
-import bb from './img/bb.png';
-import bk from './img/bk.png';
-import bn from './img/bn.png';
-import bp from './img/bp.png';
-import bq from './img/bq.png';
-import br from './img/br.png';
-import wb from './img/wb.png';
-import wk from './img/wk.png';
-import wn from './img/wn.png';
-import wp from './img/wp.png';
-import wq from './img/wq.png';
-import wr from './img/wr.png';
 
 function Square(props) {
   let classes = "Square";
@@ -32,16 +20,7 @@ class Board extends React.Component{
   }
 
   render(){
-    const pieces = [
-      [br, bb, bn, bk, bq, bn, bb, br],
-      Array(8).fill(bp),
-      Array(8).fill(null),
-      Array(8).fill(null),
-      Array(8).fill(null),
-      Array(8).fill(null),
-      Array(8).fill(wp),
-      [wr, wb, wn, wk, wq, wn, wb, wr],
-    ];
+    const pieces = this.props.pieces;
     let board = [];
     var isPrimary = true;
     for(var i = 0; i < 8; i++){
@@ -77,11 +56,12 @@ class Menu extends React.Component{
 
 class Game extends React.Component{
   render(){
+    console.log(this.props)
     return(
       <div className="Game">
         <div className="game-board">
           <p><strong>Board</strong></p>
-          <Board/>
+          <Board pieces={this.props.engine.pieces}/>
         </div>
         <div className="game-info">
           <p><strong>Info</strong></p>
@@ -103,12 +83,23 @@ class Header extends React.Component{
 }
 
 class App extends React.Component{
+  constructor(props){
+    super(props);
+    this.state = {
+      engine: new GameEngine()
+    }
+  }
+
+  newGame(){
+
+  }
+
   render(){
     return(
       <div className="App">
         <Header />
         <Menu />
-        <Game />
+        <Game engine={this.state.engine}/>
       </div>
     );
   }
