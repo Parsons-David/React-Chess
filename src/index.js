@@ -65,6 +65,16 @@ class Board extends React.Component{
   }
 }
 
+class Menu extends React.Component{
+  render(){
+    return (
+      <div className="Menu">
+        <button className="btn">New Game</button>
+      </div>
+    );
+  }
+}
+
 class Game extends React.Component{
   render(){
     return(
@@ -97,6 +107,7 @@ class App extends React.Component{
     return(
       <div className="App">
         <Header />
+        <Menu />
         <Game />
       </div>
     );

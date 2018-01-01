@@ -1,8 +1,14 @@
 .Header {
   text-align: center;
   border-bottom: solid;
+}
+
+.Menu {
+  text-align: center;
+  border-bottom: solid;
   margin-bottom: 10px;
 }
+
 
 .Game {
   display: inline-flex;
