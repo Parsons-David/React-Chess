@@ -91,14 +91,14 @@ class App extends React.Component{
   }
 
   newGame(){
-
+    alert("New Game!");
   }
 
   render(){
     return(
       <div className="App">
         <Header />
-        <Menu />
+        <Menu newGame={this.newGame.bind(this)}/>
         <Game engine={this.state.engine}/>
       </div>
     );
