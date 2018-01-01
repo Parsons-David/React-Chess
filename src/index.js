@@ -63,7 +63,7 @@ class Menu extends React.Component{
   render(){
     return (
       <div className="Menu">
-        <button className="btn">New Game</button>
+        <button onClick={this.props.newGame} className="btn">New Game</button>
       </div>
     );
   }
