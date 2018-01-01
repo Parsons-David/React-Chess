@@ -34,7 +34,7 @@ class Board extends React.Component{
 
   render(){
     // console.log("Rendering Board");
-    const pieces = this.props.pieces;
+    const pieces = this.props.board.pieces;
     let board = [];
     var isPrimary = true;
     for(var i = 0; i < 8; i++){
@@ -114,7 +114,7 @@ class Game extends React.Component{
       <div className="Game">
         <div className="game-board">
           <p><strong>Board</strong></p>
-          <Board onClick={this.handleBoardClick.bind(this)} pieces={this.props.engine.pieces}/>
+          <Board onClick={this.handleBoardClick.bind(this)} board={this.props.engine.board}/>
         </div>
         <div className="game-info">
           <p><strong>Info</strong></p>
