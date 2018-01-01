@@ -11,10 +11,10 @@ import wn from './img/wn.png';
 import wp from './img/wp.png';
 import wq from './img/wq.png';
 import wr from './img/wr.png';
+
 class GameEngine{
 
   constructor(){
-
     // Board Pieces
     this.pieces = [
       [br, bb, bn, bk, bq, bn, bb, br],
@@ -26,7 +26,18 @@ class GameEngine{
       Array(8).fill(wp),
       [wr, wb, wn, wk, wq, wn, wb, wr],
     ];
+    // Instance Methods
+    this.movePiece = this.movePiece.bind(this);
   }
+
+  movePiece(move){
+    console.log("Moving => ");
+    console.log(move);
+    let tmpPiece = this.pieces[move.src.row][move.src.col];
+    this.pieces[move.src.row][move.src.col] = this.pieces[move.dest.row][move.dest.col];
+    this.pieces[move.dest.row][move.dest.col] = tmpPiece;
+  }
+
 }
 
 

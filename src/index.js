@@ -4,11 +4,16 @@ import {GameEngine} from './Chess.js'
 import './index.css';
 
 function Square(props) {
+  // console.log(props);
   let classes = "Square";
   classes += ( props.isPrimary ? " Square-primary" : " Square-accent" );
   return (
-    <button className={classes}>
-      <img src={props.piece} alt="" className="piece"/>
+    <button onClick={() => props.onClick({row:props.row, col:props.col})}
+            className={classes}>
+      <img
+        src={props.piece}
+        alt=""
+        className="piece"/>
     </button>
   );
 }
@@ -16,10 +21,17 @@ function Square(props) {
 class Board extends React.Component{
 
   renderSquare(props){
-    return <Square piece={props.piece} isPrimary={props.isPrimary}/>
+    return <Square
+      row={props.row}
+      col={props.col}
+      onClick={props.onClick}
+      piece={props.piece}
+      isPrimary={props.isPrimary}
+    />
   }
 
   render(){
+    // console.log("Rendering Board");
     const pieces = this.props.pieces;
     let board = [];
     var isPrimary = true;
@@ -29,6 +41,9 @@ class Board extends React.Component{
         row.push(this.renderSquare({
           isPrimary : isPrimary,
           piece : pieces[i][j],
+          onClick : this.props.onClick,
+          row:i,
+          col:j,
         }));
         isPrimary = !isPrimary;
       }
@@ -55,13 +70,49 @@ class Menu extends React.Component{
 }
 
 class Game extends React.Component{
+
+  constructor(props){
+    super(props);
+    this.state = {
+      move: {
+        src : null,
+        dest : null,
+      },
+    };
+  }
+
+  handleBoardClick(selectedSquare){
+    // console.log(selectedSquare);
+    // Selecting Source Square
+    if(this.state.move.src === null){
+      let move = Object.assign({}, this.state.move);
+      move.src = selectedSquare;
+      move.dest = null;
+      this.setState({
+        move: move
+      });
+    // Selected Destination Square
+    } else {
+      let completeMove = Object.assign({}, this.state.move);
+      completeMove.dest = selectedSquare;
+      // Do this with state
+      // console.log(completeMove);
+      this.props.engine.movePiece(completeMove);
+      this.setState({
+        move: {
+          src: null,
+          dest: null,
+        }
+      });
+    }
+  }
+
   render(){
-    console.log(this.props)
     return(
       <div className="Game">
         <div className="game-board">
           <p><strong>Board</strong></p>
-          <Board pieces={this.props.engine.pieces}/>
+          <Board onClick={this.handleBoardClick.bind(this)} pieces={this.props.engine.pieces}/>
         </div>
         <div className="game-info">
           <p><strong>Info</strong></p>
