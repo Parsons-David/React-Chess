@@ -21,7 +21,9 @@ function Square(props) {
 class Board extends React.Component{
 
   renderSquare(props){
+    let sKey = "" + props.row + props.col;
     return <Square
+      key={sKey}
       row={props.row}
       col={props.col}
       onClick={props.onClick}
