@@ -17,7 +17,7 @@ function Square(props) {
   classes += ( props.isPrimary ? " Square-primary" : " Square-accent" );
   const src = (props.piece === null ? "" : props.piece.src);
   return (
-    <button onClick={() => props.onClick({file:props.file, rank:props.rank})}
+    <button onClick={() => props.onClick(props.location)}
             className={classes}>
       <img
         src={src}
@@ -30,11 +30,9 @@ function Square(props) {
 class Board extends React.Component{
 
   renderSquare(props){
-    let sKey = "" + props.file + props.rank;
     return <Square
-      key={sKey}
-      file={props.file}
-      rank={props.rank}
+      key={props.location}
+      location={props.location}
       onClick={props.onClick}
       piece={props.piece}
       isPrimary={props.isPrimary}
@@ -43,31 +41,29 @@ class Board extends React.Component{
 
   render(){
     // console.log("Rendering Board");
+    const files = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+    const ranks = ['1', '2', '3', '4', '5', '6', '7', '8'].reverse();
     const pieces = this.props.board.pieces;
-    let tmpBoard = createEmptyBoard();
-    var isPrimary = true;
-    for(var i = 7; i >= 0; i--){
-      let row = [];
-      for(var j = 0; j < 8; j++){
-        tmpBoard[i][j] = this.renderSquare({
-          isPrimary : isPrimary,
-          piece : pieces[i][j],
-          onClick : this.props.onClick,
-          file:i,
-          rank:j,
-        });
-        isPrimary = !isPrimary;
-      }
-      isPrimary = !isPrimary;
-    }
     let board = [];
-    for(var i = 0; i < 8; i++){
+    let isPrimary = true;
+    const context = this;
+
+    // Push Pieces in a row from a, b, -> g, h
+    // Do this top down in the ranks from 8, 7, -> 2, 1
+    ranks.forEach(function(rank) {
       let row = [];
-      for(var j = 0; j < 8; j++){
-        row.push(tmpBoard[j][i]);
-      }
-      board.push(<div key={i} className="board-row">{row}</div>);
-    }
+      files.forEach(function(file) {
+        row.push(context.renderSquare({
+          isPrimary : isPrimary,
+          piece : pieces[file+rank],
+          onClick : context.props.onClick,
+          location: file+rank,
+        }));
+        isPrimary = !isPrimary;
+      });
+      board.push(<div key={rank} className="board-row">{row}</div>);
+      isPrimary = !isPrimary;
+    });
 
     return(
       <div className="Board">
@@ -100,30 +96,30 @@ class Game extends React.Component{
   }
 
   handleBoardClick(selectedSquare){
-    // console.log(selectedSquare);
+    console.log(selectedSquare);
     // Selecting Source Square
-    if(this.state.move.src === null){
-      let move = Object.assign({}, this.state.move);
-      move.src = selectedSquare;
-      move.dest = null;
-      this.setState({
-        move: move
-      });
-    // Selected Destination Square
-    } else {
-
-      let completeMove = Object.assign({}, this.state.move);
-      completeMove.dest = selectedSquare;
-      // Do this with state
-      // console.log(completeMove);
-      this.props.engine.movePiece(completeMove);
-      this.setState({
-        move: {
-          src: null,
-          dest: null,
-        }
-      });
-    }
+    // if(this.state.move.src === null){
+    //   let move = Object.assign({}, this.state.move);
+    //   move.src = selectedSquare;
+    //   move.dest = null;
+    //   this.setState({
+    //     move: move
+    //   });
+    // // Selected Destination Square
+    // } else {
+    //
+    //   let completeMove = Object.assign({}, this.state.move);
+    //   completeMove.dest = selectedSquare;
+    //   // Do this with state
+    //   // console.log(completeMove);
+    //   this.props.engine.movePiece(completeMove);
+    //   this.setState({
+    //     move: {
+    //       src: null,
+    //       dest: null,
+    //     }
+    //   });
+    // }
   }
 
   render(){
