@@ -7,11 +7,12 @@ function Square(props) {
   // console.log(props);
   let classes = "Square";
   classes += ( props.isPrimary ? " Square-primary" : " Square-accent" );
+  const src = (props.piece === null ? "" : props.piece.src);
   return (
-    <button onClick={() => props.onClick({row:props.row, col:props.col})}
+    <button onClick={() => props.onClick({file:props.file, rank:props.rank})}
             className={classes}>
       <img
-        src={props.piece}
+        src={src}
         alt=""
         className="piece"/>
     </button>
@@ -21,11 +22,11 @@ function Square(props) {
 class Board extends React.Component{
 
   renderSquare(props){
-    let sKey = "" + props.row + props.col;
+    let sKey = "" + props.file + props.rank;
     return <Square
       key={sKey}
-      row={props.row}
-      col={props.col}
+      file={props.file}
+      rank={props.rank}
       onClick={props.onClick}
       piece={props.piece}
       isPrimary={props.isPrimary}
@@ -37,15 +38,15 @@ class Board extends React.Component{
     const pieces = this.props.board.pieces;
     let board = [];
     var isPrimary = true;
-    for(var i = 0; i < 8; i++){
+    for(var i = 7; i >= 0; i--){
       let row = [];
       for(var j = 0; j < 8; j++){
         row.push(this.renderSquare({
           isPrimary : isPrimary,
           piece : pieces[i][j],
           onClick : this.props.onClick,
-          row:i,
-          col:j,
+          file:i,
+          rank:j,
         }));
         isPrimary = !isPrimary;
       }
@@ -95,6 +96,7 @@ class Game extends React.Component{
       });
     // Selected Destination Square
     } else {
+
       let completeMove = Object.assign({}, this.state.move);
       completeMove.dest = selectedSquare;
       // Do this with state
