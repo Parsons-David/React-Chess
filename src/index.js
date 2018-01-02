@@ -3,6 +3,14 @@ import ReactDOM from 'react-dom';
 import {GameEngine} from './Chess.js'
 import './index.css';
 
+function createEmptyBoard(){
+  let tmpBoard = [];
+  for(var i = 0; i < 8; i++){
+    tmpBoard.push(Array(8).fill(null));
+  }
+  return tmpBoard;
+}
+
 function Square(props) {
   // console.log(props);
   let classes = "Square";
@@ -36,21 +44,28 @@ class Board extends React.Component{
   render(){
     // console.log("Rendering Board");
     const pieces = this.props.board.pieces;
-    let board = [];
+    let tmpBoard = createEmptyBoard();
     var isPrimary = true;
     for(var i = 7; i >= 0; i--){
       let row = [];
       for(var j = 0; j < 8; j++){
-        row.push(this.renderSquare({
+        tmpBoard[i][j] = this.renderSquare({
           isPrimary : isPrimary,
           piece : pieces[i][j],
           onClick : this.props.onClick,
           file:i,
           rank:j,
-        }));
+        });
         isPrimary = !isPrimary;
       }
       isPrimary = !isPrimary;
+    }
+    let board = [];
+    for(var i = 0; i < 8; i++){
+      let row = [];
+      for(var j = 0; j < 8; j++){
+        row.push(tmpBoard[j][i]);
+      }
       board.push(<div key={i} className="board-row">{row}</div>);
     }
 

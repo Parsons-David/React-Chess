@@ -12,10 +12,53 @@ import wp from './img/wp.png';
 import wq from './img/wq.png';
 import wr from './img/wr.png';
 
+const move = 'm';
+const capture = 'c'
+
+// Valid Position on Board
+function validPosition(pos){
+  if(pos === null || pos.file === null || pos.rank === null){
+    return false;
+  }
+  if(pos.file > 7 || pos.file < 0 || pos.rank > 7 || pos.rank < 0){
+    return false;
+  }
+  return true;
+}
+
+// Assign Simple Move
+function assignMob_M(mob, pos){
+  // console.log(mob);
+  // console.log(pos);
+  if(validPosition(pos)){
+    mob[pos.file][pos.rank] = move;
+  }
+}
+
+// Assign Capture
+function assignMob_C(mob, pos){
+    if(validPosition(pos)){
+      mob[pos.file][pos.rank] = capture;
+    }
+}
+
+function createEmptyBoard(){
+  let tmpBoard = [];
+  for(var i = 0; i < 8; i++){
+    tmpBoard.push(Array(8).fill(null));
+  }
+  return tmpBoard;
+}
+
+
 class Piece{
   constructor(color, location){
     this.color = color;
     this.location = location;
+  }
+
+  getAccess(target){
+    return this.mobility[target.file][target.rank];
   }
 
   move(target){
@@ -27,6 +70,32 @@ class Pawn extends Piece{
   constructor(color, location, src){
     super(color, location);
     this.src = (color === 'b' ? bp : wp );
+    this.mobility = createEmptyBoard();
+    this.initialMobility();
+  }
+
+  initialMobility(){
+    let tmpPos = Object.assign({}, this.location);
+    let dir = (this.color === 'b' ? -1 : 1 );
+
+    // console.log(this);
+    tmpPos.rank += (1 * dir);
+    assignMob_M(this.mobility, tmpPos);
+    // console.log(this);
+    tmpPos.file -= 1;
+    assignMob_C(this.mobility, tmpPos);
+    // console.log(this);
+    tmpPos.file += 2;
+    assignMob_C(this.mobility, tmpPos);
+    // console.log(this);
+    tmpPos.file -= 1;
+    tmpPos.rank += (1 * dir);
+    assignMob_M(this.mobility, tmpPos);
+    // console.log(this);
+  }
+
+  updateMobility(){
+
   }
 }
 
@@ -72,20 +141,20 @@ class Board{
     let currentColor = 'w';
     // Tmp White Backrow
     let tmpRow = [];
-    tmpRow.push(new Rook(currentColor, {f:0,r:0}));
-    tmpRow.push(new Knight(currentColor, {f:1,r:0}));
-    tmpRow.push(new Bishop(currentColor, {f:2,r:0}));
-    tmpRow.push(new Queen(currentColor, {f:3,r:0}));
-    tmpRow.push(new King(currentColor, {f:4,r:0}));
-    tmpRow.push(new Bishop(currentColor, {f:5,r:0}));
-    tmpRow.push(new Knight(currentColor, {f:6,r:0}));
-    tmpRow.push(new Rook(currentColor, {f:7,r:0}));
+    tmpRow.push(new Rook(currentColor, {file:0,rank:0}));
+    tmpRow.push(new Knight(currentColor, {file:1,rank:0}));
+    tmpRow.push(new Bishop(currentColor, {file:2,rank:0}));
+    tmpRow.push(new Queen(currentColor, {file:3,rank:0}));
+    tmpRow.push(new King(currentColor, {file:4,rank:0}));
+    tmpRow.push(new Bishop(currentColor, {file:5,rank:0}));
+    tmpRow.push(new Knight(currentColor, {file:6,rank:0}));
+    tmpRow.push(new Rook(currentColor, {file:7,rank:0}));
     // Push White Backrow
     this.pieces.push(tmpRow);
     // Tmp White Pawns
     tmpRow = [];
     for(var i = 0; i < 8; i++){
-      tmpRow.push(new Pawn(currentColor, {f:i, r:1}));
+      tmpRow.push(new Pawn(currentColor, {file:i, rank:1}));
     }
     // Push White Pawns
     this.pieces.push(tmpRow);
@@ -101,20 +170,20 @@ class Board{
     // Tmp Black Pawns
     tmpRow = [];
     for(var i = 0; i < 8; i++){
-      tmpRow.push(new Pawn(currentColor, {f:i, r:1}));
+      tmpRow.push(new Pawn(currentColor, {file:i, rank:6}));
     }
     // Push Black Pawns
     this.pieces.push(tmpRow);
     // Tmp White Backrow
     tmpRow = [];
-    tmpRow.push(new Rook(currentColor, {f:0,r:0}));
-    tmpRow.push(new Knight(currentColor, {f:1,r:0}));
-    tmpRow.push(new Bishop(currentColor, {f:2,r:0}));
-    tmpRow.push(new Queen(currentColor, {f:3,r:0}));
-    tmpRow.push(new King(currentColor, {f:4,r:0}));
-    tmpRow.push(new Bishop(currentColor, {f:5,r:0}));
-    tmpRow.push(new Knight(currentColor, {f:6,r:0}));
-    tmpRow.push(new Rook(currentColor, {f:7,r:0}));
+    tmpRow.push(new Rook(currentColor, {file:0,rank:7}));
+    tmpRow.push(new Knight(currentColor, {file:1,rank:7}));
+    tmpRow.push(new Bishop(currentColor, {file:2,rank:7}));
+    tmpRow.push(new Queen(currentColor, {file:3,rank:7}));
+    tmpRow.push(new King(currentColor, {file:4,rank:7}));
+    tmpRow.push(new Bishop(currentColor, {file:5,rank:7}));
+    tmpRow.push(new Knight(currentColor, {file:6,rank:7}));
+    tmpRow.push(new Rook(currentColor, {file:7,rank:7}));
     // Push Black Backrow
     this.pieces.push(tmpRow);
   }
@@ -148,6 +217,11 @@ class GameEngine{
     // console.log(this);
     let tmpPiece = this.board.pieces[move.src.file][move.src.rank];
     if(tmpPiece === null){
+      return;
+    }
+    console.log(tmpPiece);
+    let access = tmpPiece.getAccess(move.dest);
+    if(access === null){
       return;
     }
     this.board.pieces[move.src.file][move.src.rank] = null;
