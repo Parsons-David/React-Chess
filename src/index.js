@@ -97,29 +97,30 @@ class Game extends React.Component{
 
   handleBoardClick(selectedSquare){
     console.log(selectedSquare);
+
     // Selecting Source Square
-    // if(this.state.move.src === null){
-    //   let move = Object.assign({}, this.state.move);
-    //   move.src = selectedSquare;
-    //   move.dest = null;
-    //   this.setState({
-    //     move: move
-    //   });
-    // // Selected Destination Square
-    // } else {
-    //
-    //   let completeMove = Object.assign({}, this.state.move);
-    //   completeMove.dest = selectedSquare;
-    //   // Do this with state
-    //   // console.log(completeMove);
-    //   this.props.engine.movePiece(completeMove);
-    //   this.setState({
-    //     move: {
-    //       src: null,
-    //       dest: null,
-    //     }
-    //   });
-    // }
+    if(this.state.move.src === null){
+      let move = Object.assign({}, this.state.move);
+      move.src = selectedSquare;
+      move.dest = null;
+        this.setState({
+        move: move
+      });
+      // console.log(move);
+    // Selected Destination Square
+    } else {
+      let completeMove = Object.assign({}, this.state.move);
+      completeMove.dest = selectedSquare;
+      // console.log(completeMove);
+      // Do this with state
+      this.props.engine.executeMove(completeMove);
+      this.setState({
+        move: {
+          src: null,
+          dest: null,
+        }
+      });
+    }
   }
 
   render(){
