@@ -15,6 +15,7 @@ import wr from './img/wr.png';
 const MOVE = 'move';
 const CAPTURE = 'cap';
 const EN_PASSANT_SETUP = 'eps';
+const EN_PASSANT_CAPTURE = 'epc';
 const CASTLE = 'casl';
 
 function initMobility(piece){
