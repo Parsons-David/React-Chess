@@ -12,41 +12,106 @@ import wp from './img/wp.png';
 import wq from './img/wq.png';
 import wr from './img/wr.png';
 
-const move = 'm';
-const capture = 'c'
+const MOVE = 'm';
+const CAPTURE = 'c'
+
+function updateMobility(piece){
+  if(!(piece instanceof Piece)){
+    console.log("updateMobility revieced a Object that wasn't a peice");
+  }
+  if(piece instanceof Pawn){
+    // console.log("Pawn!");
+    let dir = (piece.color === 'w' ? 1 : -1);
+    let newMob = createEmptyBoard();
+    // Moves/Captures in Forward Direction so up for White
+    // Move/Capture : [up, (right (+), left (-))]
+    let moves = [
+      [1 * dir, 0],
+      [2 * dir, 0]]
+    let captures = [
+      [1 * dir, -1],
+      [1 * dir, 1]];
+    console.log(piece.location);
+    moves.forEach(function (move) {
+      let newMove = isValidBoardPostion(move, piece.location);
+      if(newMove !== null){
+        console.log('\t' + newMove);
+        newMob[newMove] = MOVE;
+      }
+    });
+    captures.forEach(function (capture) {
+      let newCap = isValidBoardPostion(capture, piece.location);
+      if(newCap !== null){
+        console.log('\t' + newCap);
+        newMob[newCap] = CAPTURE;
+      }
+    });
+    console.log(newMob);
+    piece.mobility = Object.assign({}, newMob);
+
+  } else if(piece instanceof Rook){
+    console.log("Rook!");
+
+  } else if(piece instanceof Knight){
+    console.log("Knight!");
+
+  } else if(piece instanceof Bishop){
+    console.log("Bishop!");
+
+  } else if(piece instanceof Queen){
+    console.log("Queen!");
+
+  } else if(piece instanceof King){
+    console.log("King!");
+
+  }
+}
+
+function locationToPos(location){
+  let pos = {
+    file: (location.charCodeAt(0) - 'a'.charCodeAt(0)) + 1,
+    rank: parseInt(location.charAt(1)),
+  };
+  if(pos === null || !((typeof pos.file === "number") && Math.floor(pos.file) === pos.file) || !((typeof pos.rank === "number") && Math.floor(pos.rank) === pos.rank) ){
+    console.log('locationToPos revieced an invalid location:');
+    console.log("=============");
+    console.log("**LOCATION**");
+    console.log(location);
+    console.log("=============");
+    console.log("**POS**");
+    console.log(pos);
+    console.log("=============");
+    return null;
+  }
+  return pos;
+}
 
 // Valid Position on Board
-function validPosition(pos){
-  if(pos === null || pos.file === null || pos.rank === null){
-    return false;
+function isValidBoardPostion(move, location){
+  let pos = locationToPos(location);
+  if(pos === null){
+    return null;
   }
-  if(pos.file > 7 || pos.file < 0 || pos.rank > 7 || pos.rank < 0){
-    return false;
+  pos.rank += move[0];
+  pos.file += move[1];
+  if(pos.file > 8 || pos.file < 1 || pos.rank > 8 || pos.rank < 1){
+    return null;
   }
-  return true;
-}
-
-// Assign Simple Move
-function assignMob_M(mob, pos){
-  // console.log(mob);
+  const files = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
   // console.log(pos);
-  if(validPosition(pos)){
-    mob[pos.file][pos.rank] = move;
-  }
+  return ""+files[pos.file - 1]+pos.rank;
 }
 
-// Assign Capture
-function assignMob_C(mob, pos){
-    if(validPosition(pos)){
-      mob[pos.file][pos.rank] = capture;
-    }
-}
 
 function createEmptyBoard(){
-  let tmpBoard = [];
-  for(var i = 0; i < 8; i++){
-    tmpBoard.push(Array(8).fill(null));
-  }
+  const files = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+  const ranks = ['1', '2', '3', '4', '5', '6', '7', '8'];
+  let tmpBoard = {};
+  files.forEach(function(file){
+    ranks.forEach(function (rank) {
+      tmpBoard[file+rank] = null;
+    });
+  });
   return tmpBoard;
 }
 
@@ -55,9 +120,12 @@ class Piece{
   constructor(color, location){
     this.color = color;
     this.location = location;
+    updateMobility(this);
   }
 
   getAccess(target){
+    console.log(target);
+    console.log(this);
     return this.mobility[target];
   }
 
@@ -70,28 +138,6 @@ class Pawn extends Piece{
   constructor(color, location, src){
     super(color, location);
     this.src = (color === 'b' ? bp : wp );
-    this.mobility = createEmptyBoard();
-    // this.initialMobility();
-  }
-
-  initialMobility(){
-    let tmpPos = Object.assign({}, this.location);
-    let dir = (this.color === 'b' ? -1 : 1 );
-
-    // console.log(this);
-    tmpPos.rank += (1 * dir);
-    assignMob_M(this.mobility, tmpPos);
-    // console.log(this);
-    tmpPos.file -= 1;
-    assignMob_C(this.mobility, tmpPos);
-    // console.log(this);
-    tmpPos.file += 2;
-    assignMob_C(this.mobility, tmpPos);
-    // console.log(this);
-    tmpPos.file -= 1;
-    tmpPos.rank += (1 * dir);
-    assignMob_M(this.mobility, tmpPos);
-    // console.log(this);
   }
 
   updateMobility(){
@@ -213,6 +259,7 @@ class GameEngine{
     console.log(tmpPiece);
     let access = tmpPiece.getAccess(move.dest);
     if(access === null){
+      console.log("NULL");
       return;
     }
     this.board.pieces[move.src] = null;
