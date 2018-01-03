@@ -12,42 +12,29 @@ import wp from './img/wp.png';
 import wq from './img/wq.png';
 import wr from './img/wr.png';
 
-const MOVE = 'm';
-const CAPTURE = 'c'
+const MOVE = 'move';
+const CAPTURE = 'cap';
+const EN_PASSANT_SETUP = 'eps';
+const CASTLE = 'casl';
 
 function initMobility(piece){
   if(!(piece instanceof Piece)){
     console.log("updateMobility revieced a Object that wasn't a peice");
   }
   if(piece instanceof Pawn){
-    // console.log("Pawn!");
+    updateMobility(piece);
     let dir = (piece.color === 'w' ? 1 : -1);
-    let newMob = createEmptyBoard();
+    let currMob = Object.assign({}, piece.mobility);
     // Moves/Captures in Forward Direction so up for White
     // Move/Capture : [up, (right (+), left (-))]
-    let moves = [
-      [1 * dir, 0],
-      [2 * dir, 0]]
-    let captures = [
-      [1 * dir, -1],
-      [1 * dir, 1]];
-    // console.log(piece.location);
-    moves.forEach(function (move) {
-      let newMove = isValidBoardPostion(move, piece.location);
-      if(newMove !== null){
-        // console.log('\t' + newMove);
-        newMob[newMove] = MOVE;
-      }
-    });
-    captures.forEach(function (capture) {
-      let newCap = isValidBoardPostion(capture, piece.location);
-      if(newCap !== null){
-        // console.log('\t' + newCap);
-        newMob[newCap] = CAPTURE;
-      }
-    });
+    let eps = [2 * dir, 0];
+    let newMove = isValidBoardPostion(eps, piece.location);
+    if(newMove !== null){
+      // console.log('\t' + newMove);
+      currMob[newMove] = MOVE;
+    }
     // console.log(newMob);
-    piece.mobility = Object.assign({}, newMob);
+    piece.mobility = Object.assign({}, currMob);
 
   } else if(piece instanceof Rook){
     updateMobility(piece);
@@ -59,6 +46,20 @@ function initMobility(piece){
     updateMobility(piece);
   } else if(piece instanceof King){
     updateMobility(piece);
+    let currMob = Object.assign({}, piece.mobility);
+    // Moves/Captures in Forward Direction so up for White
+    // Move/Capture : [up, (right (+), left (-))]
+    let castles = [
+      [0, 2],
+      [0, -2]];
+    castles.forEach(function (castle) {
+      let newMove = isValidBoardPostion(castle, piece.location);
+      if(newMove !== null){
+        // console.log('\t' + newMove);
+        currMob[newMove] = MOVE;
+      }
+    });
+    piece.mobility = Object.assign({}, currMob);
   }
 }
 
