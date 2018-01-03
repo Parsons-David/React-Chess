@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {GameEngine} from './Chess.js'
+import {Engine} from './Engine.js'
 import './index.css';
 
 function createEmptyBoard(){
@@ -153,7 +153,7 @@ class App extends React.Component{
   constructor(props){
     super(props);
     this.state = {
-      engine: new GameEngine()
+      engine: new Engine()
     }
   }
 
