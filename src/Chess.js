@@ -15,7 +15,7 @@ import wr from './img/wr.png';
 const MOVE = 'm';
 const CAPTURE = 'c'
 
-function updateMobility(piece){
+function initMobility(piece){
   if(!(piece instanceof Piece)){
     console.log("updateMobility revieced a Object that wasn't a peice");
   }
@@ -28,6 +28,52 @@ function updateMobility(piece){
     let moves = [
       [1 * dir, 0],
       [2 * dir, 0]]
+    let captures = [
+      [1 * dir, -1],
+      [1 * dir, 1]];
+    // console.log(piece.location);
+    moves.forEach(function (move) {
+      let newMove = isValidBoardPostion(move, piece.location);
+      if(newMove !== null){
+        // console.log('\t' + newMove);
+        newMob[newMove] = MOVE;
+      }
+    });
+    captures.forEach(function (capture) {
+      let newCap = isValidBoardPostion(capture, piece.location);
+      if(newCap !== null){
+        // console.log('\t' + newCap);
+        newMob[newCap] = CAPTURE;
+      }
+    });
+    // console.log(newMob);
+    piece.mobility = Object.assign({}, newMob);
+
+  } else if(piece instanceof Rook){
+    updateMobility(piece);
+  } else if(piece instanceof Knight){
+    updateMobility(piece);
+  } else if(piece instanceof Bishop){
+    updateMobility(piece);
+  } else if(piece instanceof Queen){
+    updateMobility(piece);
+  } else if(piece instanceof King){
+    updateMobility(piece);
+  }
+}
+
+function updateMobility(piece){
+  if(!(piece instanceof Piece)){
+    console.log("updateMobility revieced a Object that wasn't a peice");
+  }
+  if(piece instanceof Pawn){
+    // console.log("Pawn!");
+    let dir = (piece.color === 'w' ? 1 : -1);
+    let newMob = createEmptyBoard();
+    // Moves/Captures in Forward Direction so up for White
+    // Move/Capture : [up, (right (+), left (-))]
+    let moves = [
+      [1 * dir, 0]]
     let captures = [
       [1 * dir, -1],
       [1 * dir, 1]];
@@ -225,7 +271,7 @@ class Piece{
   constructor(color, location){
     this.color = color;
     this.location = location;
-    updateMobility(this);
+    initMobility(this);
   }
 
   getAccess(target){
