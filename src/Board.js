@@ -8,19 +8,27 @@ import {
   King
 } from './Pieces.js';
 
+
+const FILES = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+const RANKS = ['1', '2', '3', '4', '5', '6', '7', '8'];
+
 class Board{
 
+  constructor(){
+    this.pieces = [];
+    this.createNewBoard();
+    // console.log(this);
+  }
+
   createNewBoard(){
-    const files = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
-    const ranks = ['1', '2', '3', '4', '5', '6', '7', '8'];
     let board = {};
-    files.forEach(function(file){
-      ranks.forEach(function (rank) {
+    FILES.forEach(function(file){
+      RANKS.forEach(function (rank) {
         board[file+rank] = null;
       });
     });
     // Place Pawns
-    files.forEach(function(file){
+    FILES.forEach(function(file){
       board[file+'2'] = new Pawn('w', file+'2');
       board[file+'7'] = new Pawn('b', file+'7');
     });
@@ -53,17 +61,9 @@ class Board{
     this.pieces = board;
   }
 
-  constructor(){
-    this.pieces = [];
-    this.createNewBoard();
-    // console.log(this);
+  getPiece(location){
+    return this.pieces[location];
   }
-
-  // setUpPiece(p){
-  //   this.pieces[0][0] = new Rook('b', {});
-  //   console.log(this.pieces);
-  // }
-
 
 }
 export {Board};

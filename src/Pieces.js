@@ -27,12 +27,6 @@ class Piece{
     initMobility(this);
   }
 
-  getAccess(target){
-    console.log(target);
-    console.log(this);
-    return this.mobility[target];
-  }
-
   move(target){
     this.location = target;
     updateMobility(this);
@@ -43,6 +37,11 @@ class Pawn extends Piece{
   constructor(color, location, src){
     super(color, location);
     this.src = (color === 'b' ? bp : wp );
+    this.enPasstable = false;
+  }
+
+  markEnPassantable(){
+    this.enPasstable = true;
   }
 }
 

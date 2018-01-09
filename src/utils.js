@@ -82,7 +82,7 @@ function initMobility(piece){
     let newMove = isValidBoardPostion(eps, piece.location);
     if(newMove !== null){
       // console.log('\t' + newMove);
-      currMob[newMove] = MOVE;
+      currMob[newMove] = EN_PASSANT_SETUP;
     }
     // console.log(newMob);
     piece.mobility = Object.assign({}, currMob);
@@ -107,7 +107,7 @@ function initMobility(piece){
       let newMove = isValidBoardPostion(castle, piece.location);
       if(newMove !== null){
         // console.log('\t' + newMove);
-        currMob[newMove] = MOVE;
+        currMob[newMove] = CASTLE;
       }
     });
     piece.mobility = Object.assign({}, currMob);
@@ -273,5 +273,10 @@ function updateMobility(piece){
 
 export {
   initMobility,
-  updateMobility
+  updateMobility,
+  MOVE,
+  CAPTURE,
+  EN_PASSANT_SETUP,
+  EN_PASSANT_CAPTURE,
+  CASTLE
 }

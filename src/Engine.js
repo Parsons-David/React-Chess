@@ -1,4 +1,11 @@
-import {Board} from './Board.js'
+import {Board} from './Board.js';
+import {
+  MOVE,
+  CAPTURE,
+  EN_PASSANT_SETUP,
+  EN_PASSANT_CAPTURE,
+  CASTLE
+} from './utils.js';
 
 class Engine{
 
@@ -10,18 +17,46 @@ class Engine{
   }
 
   executeMove(move){
-    console.log("Moving => ");
+    console.log("====START=====");
+    console.log("EXECUTTING:");
     console.log(move);
+    console.log("=====END======");
     // console.log(this);
-    let tmpPiece = this.board.pieces[move.src];
+
+    // Get Piece Being Moved
+    let tmpPiece = this.board.getPiece(move.src);
     if(tmpPiece === null){
       return;
     }
+
+    console.log("====START=====");
+    console.log("MOVING:");
     console.log(tmpPiece);
-    let access = tmpPiece.getAccess(move.dest);
+    console.log("=====END======");
+
+    const access = this.board.getAccess(tmpPiece);
     if(access === null){
       console.log("NULL");
       return;
+    }
+
+    console.log("====START=====");
+    console.log("ACCESS at " + move.dest + " is :");
+    console.log(access);
+    console.log("=====END======");
+    // console.log(access);
+    if(access === MOVE){
+
+    }else if(access === MOVE){
+
+    }else if(access === EN_PASSANT_SETUP){
+      console.log("SETTING UP AN EN PASSANT!");
+      // TODO : Might not always be a PAWN.
+      tmpPiece.markEnPassantable();
+    }else if(access === EN_PASSANT_CAPTURE){
+
+    }else if(access === CASTLE){
+
     }
     this.board.pieces[move.src] = null;
     this.board.pieces[move.dest] = tmpPiece;
