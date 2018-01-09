@@ -1,10 +1,14 @@
 import {Board} from './Board.js'
+import {King, Pawn, Rook} from './Pieces.js'
 import {
   initMobility,
   updateMobility,
   CAPTURE,
   ATTACK,
   MOVE,
+  EN_PASSANT_SETUP,
+  CASTLE,
+  EN_PASSANT_CAPTURE,
   createEmptyBoard,
   isValidBoardPostion,
 } from './utils.js';
@@ -33,10 +37,26 @@ class Engine{
     if(access === null){
       console.log("NULL");
       return;
+    } else if(access === CASTLE){
+      const rank = (tmpPiece.color === 'b' ? '8' : '1')
+      // Queen Side
+      this.board.pieces[move.src] = null;
+      this.board.pieces[move.dest] = tmpPiece;
+      tmpPiece.move(move.dest);
+      if(move.dest === 'c' + rank){
+        this.board.pieces['a' + rank].move('a' + rank);
+        this.board.pieces['d' + rank] = this.board.pieces['a' + rank];
+        this.board.pieces['a' + rank] = null;
+      } else { // King Side
+        this.board.pieces['h' + rank].move('h' + rank);
+        this.board.pieces['f' + rank] = this.board.pieces['h' + rank];
+        this.board.pieces['h' + rank] = null;
+      }
+    } else {
+      this.board.pieces[move.src] = null;
+      this.board.pieces[move.dest] = tmpPiece;
+      tmpPiece.move(move.dest);
     }
-    this.board.pieces[move.src] = null;
-    this.board.pieces[move.dest] = tmpPiece;
-    tmpPiece.move(move.dest);
     // console.log(move.dest);
     // console.log(tmpPiece.location);
     // console.log(this);
@@ -76,9 +96,47 @@ class Engine{
           }
         }
     });
+    // Unmoved Pawns and Kings have special Moves. (En Passant setup and Castling)
+    if((!piece.hasMoved) && ((piece instanceof Pawn) || (piece instanceof King))){
+      console.log("Adding Special Mobility!");
+      if(piece instanceof Pawn){
+        console.log("To a Pawn!");
+        const dir = (piece.color === 'w' ? 1 : -1);
+        const path = [1 * dir, 0];
+        let pathMove = isValidBoardPostion(path, piece.location);
+        if(pathMove !== null && mobility[pathMove] === MOVE){
+          const eps = [2 * dir, 0];
+          let newMove = isValidBoardPostion(eps, piece.location);
+          if(newMove !== null ){
+            // console.log('\t' + newMove);
+            mobility[newMove] = EN_PASSANT_SETUP;
+          }
+        }
+      } else if(piece instanceof King){
+        console.log("To a King!");
+        const rank = (piece.color === 'w' ? '1' : '8');
+        // Queen Side Castle
+        // If Rook is still there are hasn't moved
+        const qSide = board.pieces['a' + rank];
+        if((qSide !== null) && (qSide instanceof Rook) && !(qSide.hasMoved)){
+          // Make sure path is clear
+          if(board.pieces['b' + rank] === null && board.pieces['c' + rank] === null && board.pieces['d' + rank] === null){
+            mobility['c' + rank] = CASTLE;
+          }
+        }
+        // King Side Castle
+        // If Rook is still there are hasn't moved
+        const kSide = board.pieces['h' + rank];
+        if((kSide !== null) && (kSide instanceof Rook) && !(kSide.hasMoved)){
+          // Make sure path is clear
+          if(board.pieces['g' + rank] === null && board.pieces['f' + rank] === null){
+            mobility['g' + rank] = CASTLE;
+          }
+        }
+      }
+    }
     return mobility;
   }
-
 }
 
 

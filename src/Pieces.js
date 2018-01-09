@@ -17,6 +17,7 @@ import wr from './img/wr.png';
 import {
   MOVE,
   ATTACK,
+  EN_PASSANT_SETUP,
   createEmptyBoard,
   isValidBoardPostion,
 } from './utils.js';
@@ -26,6 +27,8 @@ class Piece{
   constructor(color, location){
     this.color = color;
     this.location = location;
+    this.hasMoved = false;
+    this.initialMoves = null;
   }
 
   getAccess(target){
@@ -36,6 +39,7 @@ class Piece{
 
   move(target){
     this.location = target;
+    this.hasMoved = true;
   }
 }
 
@@ -48,6 +52,9 @@ class Pawn extends Piece{
       {rank: dir * 1, file: -1, type: ATTACK, unlimited: false},
       {rank: dir * 1, file: 1, type: ATTACK, unlimited: false},
       {rank: dir * 1, file: 0, type: MOVE, unlimited: false}];
+    this.initialMoves = [
+      {rank: dir * 2, file: 0, type: EN_PASSANT_SETUP, unlimited: false}
+    ];
   }
 }
 

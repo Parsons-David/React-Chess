@@ -110,6 +110,9 @@ export {
   CAPTURE,
   MOVE,
   ATTACK,
+  EN_PASSANT_SETUP,
+  CASTLE,
+  EN_PASSANT_CAPTURE,
   createEmptyBoard,
   isValidBoardPostion,
 }
