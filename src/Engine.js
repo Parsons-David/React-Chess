@@ -57,6 +57,14 @@ class Engine{
       this.board.pieces[move.dest] = tmpPiece;
       tmpPiece.move(move.dest);
       tmpPiece.markEnPassantable();
+    } else if (access === EN_PASSANT_CAPTURE){
+      this.board.pieces[move.src] = null;
+      this.board.pieces[move.dest] = tmpPiece;
+      tmpPiece.move(move.dest);
+      const behind = (tmpPiece.color === 'b' ? 1 : -1);
+      // Left Side EP
+      const captured = isValidBoardPostion([behind, 0], move.dest);
+      this.board.pieces[captured] = null;
     } else {
       this.board.pieces[move.src] = null;
       this.board.pieces[move.dest] = tmpPiece;
@@ -139,6 +147,25 @@ class Engine{
           if(board.pieces['g' + rank] === null && board.pieces['f' + rank] === null){
             mobility['g' + rank] = CASTLE;
           }
+        }
+      }
+    }
+    if(piece instanceof Pawn){
+      const dir = (piece.color === 'b' ? -1 : 1);
+      // Left Side EP
+      const left = isValidBoardPostion([0, -1], piece.location);
+      if(left !== null && (board.pieces[left] instanceof Pawn) && board.pieces[left].enPasstable){
+        const l_behind = isValidBoardPostion([dir, 0], left);
+        if(l_behind !== null){
+          mobility[l_behind] = EN_PASSANT_CAPTURE;
+        }
+      }
+      // Right Side EP
+      const right = isValidBoardPostion([0, 1], piece.location);
+      if(right !== null && (board.pieces[right] instanceof Pawn) && board.pieces[right].enPasstable){
+        const r_behind = isValidBoardPostion([dir, 0], right);
+        if(r_behind !== null){
+          mobility[r_behind] = EN_PASSANT_CAPTURE;
         }
       }
     }

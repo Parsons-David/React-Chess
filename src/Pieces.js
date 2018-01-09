@@ -18,6 +18,7 @@ import {
   MOVE,
   ATTACK,
   EN_PASSANT_SETUP,
+  EN_PASSANT_CAPTURE,
   CAPTURE,
   createEmptyBoard,
   isValidBoardPostion,
@@ -55,6 +56,10 @@ class Pawn extends Piece{
       {rank: dir * 1, file: 0, type: MOVE, unlimited: false}];
     this.initialMoves = [
       {rank: dir * 2, file: 0, type: EN_PASSANT_SETUP, unlimited: false}
+    ];
+    this.specialMoves = [
+      {rank: dir * 1, file: 1, type: EN_PASSANT_CAPTURE, unlimited: false},
+      {rank: dir * 1, file: -1, type: EN_PASSANT_CAPTURE, unlimited: false}
     ];
     this.enPasstable = false;
   }
