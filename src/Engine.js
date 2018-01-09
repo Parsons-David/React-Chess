@@ -52,6 +52,11 @@ class Engine{
         this.board.pieces['f' + rank] = this.board.pieces['h' + rank];
         this.board.pieces['h' + rank] = null;
       }
+    } else if (access === EN_PASSANT_SETUP){
+      this.board.pieces[move.src] = null;
+      this.board.pieces[move.dest] = tmpPiece;
+      tmpPiece.move(move.dest);
+      tmpPiece.markEnPassantable();
     } else {
       this.board.pieces[move.src] = null;
       this.board.pieces[move.dest] = tmpPiece;
@@ -77,7 +82,9 @@ class Engine{
         while(newMob !== null){
           // No Piece Encountered Yet
           if(board.pieces[newMob] === null){
-            mobility[newMob] = move.type;
+            if(move.type === ATTACK || move.type === MOVE) {
+              mobility[newMob] = MOVE;
+            }
           // Encountered Enemy Piece
           } else if(board.pieces[newMob].color !== piece.color) {
             // MUST BE ABLE TO ATTACK ENEMY IN ORDER TO CAPTURE IT
@@ -98,9 +105,9 @@ class Engine{
     });
     // Unmoved Pawns and Kings have special Moves. (En Passant setup and Castling)
     if((!piece.hasMoved) && ((piece instanceof Pawn) || (piece instanceof King))){
-      console.log("Adding Special Mobility!");
+      // console.log("Adding Special Mobility!");
       if(piece instanceof Pawn){
-        console.log("To a Pawn!");
+        // console.log("To a Pawn!");
         const dir = (piece.color === 'w' ? 1 : -1);
         const path = [1 * dir, 0];
         let pathMove = isValidBoardPostion(path, piece.location);
@@ -113,7 +120,7 @@ class Engine{
           }
         }
       } else if(piece instanceof King){
-        console.log("To a King!");
+        // console.log("To a King!");
         const rank = (piece.color === 'w' ? '1' : '8');
         // Queen Side Castle
         // If Rook is still there are hasn't moved

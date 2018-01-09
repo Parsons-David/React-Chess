@@ -18,6 +18,7 @@ import {
   MOVE,
   ATTACK,
   EN_PASSANT_SETUP,
+  CAPTURE,
   createEmptyBoard,
   isValidBoardPostion,
 } from './utils.js';
@@ -49,12 +50,21 @@ class Pawn extends Piece{
     this.src = (color === 'b' ? bp : wp );
     const dir = (color === 'b' ? -1 : 1 );
     this.moves = [
-      {rank: dir * 1, file: -1, type: ATTACK, unlimited: false},
-      {rank: dir * 1, file: 1, type: ATTACK, unlimited: false},
+      {rank: dir * 1, file: -1, type: CAPTURE, unlimited: false},
+      {rank: dir * 1, file: 1, type: CAPTURE, unlimited: false},
       {rank: dir * 1, file: 0, type: MOVE, unlimited: false}];
     this.initialMoves = [
       {rank: dir * 2, file: 0, type: EN_PASSANT_SETUP, unlimited: false}
     ];
+    this.enPasstable = false;
+  }
+  markEnPassantable(){
+    this.enPasstable = true;
+  }
+  move(target){
+    this.location = target;
+    this.hasMoved = true;
+    this.enPasstable = false;
   }
 }
 
