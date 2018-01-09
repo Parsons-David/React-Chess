@@ -15,8 +15,10 @@ import wr from './img/wr.png';
 
 // UTIL IMPORTS
 import {
-  initMobility,
-  updateMobility
+  CAPTURE,
+  MOVE,
+  createEmptyBoard,
+  isValidBoardPostion,
 } from './utils.js';
 // END UTIL IMPORTS
 
@@ -24,7 +26,6 @@ class Piece{
   constructor(color, location){
     this.color = color;
     this.location = location;
-    initMobility(this);
   }
 
   getAccess(target){
@@ -35,7 +36,6 @@ class Piece{
 
   move(target){
     this.location = target;
-    updateMobility(this);
   }
 }
 
@@ -43,13 +43,25 @@ class Pawn extends Piece{
   constructor(color, location, src){
     super(color, location);
     this.src = (color === 'b' ? bp : wp );
+    const dir = (color === 'b' ? -1 : 1 );
+    this.moves = [
+      {rank: dir * 1, file: -1, type: CAPTURE, unlimited: false},
+      {rank: dir * 1, file: 1, type: CAPTURE, unlimited: false},
+      {rank: dir * 1, file: 0, type: MOVE, unlimited: false}];
   }
 }
 
+// TODO : Is dir required for anything beside PAWN?
 class Rook extends Piece{
   constructor(color, location, src){
     super(color, location);
     this.src = (color === 'b' ? br : wr );
+    const dir = (color === 'b' ? -1 : 1 );
+    this.moves = [
+      {rank: dir * 1, file: 0, type: CAPTURE, unlimited: true},
+      {rank: dir * -1, file: 0, type: CAPTURE, unlimited: true},
+      {rank: dir * 0, file: 1, type: CAPTURE, unlimited: true},
+      {rank: dir * 0, file: -1, type: CAPTURE, unlimited: true}];
   }
 }
 
@@ -57,6 +69,12 @@ class Bishop extends Piece{
   constructor(color, location, src){
     super(color, location);
     this.src = (color === 'b' ? bb : wb );
+    const dir = (color === 'b' ? -1 : 1 );
+    this.moves = [
+      {rank: dir * 1, file: 1, type: CAPTURE, unlimited: true},
+      {rank: dir * -1, file: 1, type: CAPTURE, unlimited: true},
+      {rank: dir * 1, file: -1, type: CAPTURE, unlimited: true},
+      {rank: dir * -1, file: -1, type: CAPTURE, unlimited: true}];
   }
 }
 
@@ -64,6 +82,21 @@ class Knight extends Piece{
   constructor(color, location, src){
     super(color, location);
     this.src = (color === 'b' ? bn : wn );
+    const dir = (color === 'b' ? -1 : 1 );
+    this.moves = [
+      {rank: dir * 2, file: -1, type: CAPTURE, unlimited: false},
+      {rank: dir * 2, file: 1, type: CAPTURE, unlimited: false},
+      {rank: dir * 1, file: 2, type: CAPTURE, unlimited: false},
+      {rank: dir * 1, file: -2, type: CAPTURE, unlimited: false},
+      {rank: dir * -2, file: -1, type: CAPTURE, unlimited: false},
+      {rank: dir * -2, file: 1, type: CAPTURE, unlimited: false},
+      {rank: dir * -1, file: 2, type: CAPTURE, unlimited: false},
+      {rank: dir * -1, file: -2, type: CAPTURE, unlimited: false}];
+  }
+
+  // Special Cause the way it moves
+  getMobility(){
+
   }
 }
 
@@ -71,6 +104,16 @@ class Queen extends Piece{
   constructor(color, location, src){
     super(color, location);
     this.src = (color === 'b' ? bq : wq );
+    const dir = (color === 'b' ? -1 : 1 );
+    this.moves = [
+      {rank: dir * 1, file: 0, type: CAPTURE, unlimited: true},
+      {rank: dir * -1, file: 0, type: CAPTURE, unlimited: true},
+      {rank: dir * 0, file: 1, type: CAPTURE, unlimited: true},
+      {rank: dir * 0, file: -1, type: CAPTURE, unlimited: true},
+      {rank: dir * 1, file: 1, type: CAPTURE, unlimited: true},
+      {rank: dir * -1, file: 1, type: CAPTURE, unlimited: true},
+      {rank: dir * 1, file: -1, type: CAPTURE, unlimited: true},
+      {rank: dir * -1, file: -1, type: CAPTURE, unlimited: true}];
   }
 }
 
@@ -78,6 +121,21 @@ class King extends Piece{
   constructor(color, location, src){
     super(color, location);
     this.src = (color === 'b' ? bk : wk );
+    const dir = (color === 'b' ? -1 : 1 );
+    this.moves = [
+      {rank: dir * 1, file: 0, type: CAPTURE, unlimited: false},
+      {rank: dir * -1, file: 0, type: CAPTURE, unlimited: false},
+      {rank: dir * 0, file: 1, type: CAPTURE, unlimited: false},
+      {rank: dir * 0, file: -1, type: CAPTURE, unlimited: false},
+      {rank: dir * 1, file: 1, type: CAPTURE, unlimited: false},
+      {rank: dir * -1, file: 1, type: CAPTURE, unlimited: false},
+      {rank: dir * 1, file: -1, type: CAPTURE, unlimited: false},
+      {rank: dir * -1, file: -1, type: CAPTURE, unlimited: false}];
+  }
+
+  // Special Cause Casstle
+  getMobility(){
+
   }
 }
 

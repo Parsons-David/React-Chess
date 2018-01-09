@@ -73,7 +73,6 @@ function initMobility(piece){
     console.log("updateMobility revieced a Object that wasn't a peice");
   }
   if(piece instanceof Pawn){
-    updateMobility(piece);
     let dir = (piece.color === 'w' ? 1 : -1);
     let currMob = Object.assign({}, piece.mobility);
     // Moves/Captures in Forward Direction so up for White
@@ -87,16 +86,7 @@ function initMobility(piece){
     // console.log(newMob);
     piece.mobility = Object.assign({}, currMob);
 
-  } else if(piece instanceof Rook){
-    updateMobility(piece);
-  } else if(piece instanceof Knight){
-    updateMobility(piece);
-  } else if(piece instanceof Bishop){
-    updateMobility(piece);
-  } else if(piece instanceof Queen){
-    updateMobility(piece);
   } else if(piece instanceof King){
-    updateMobility(piece);
     let currMob = Object.assign({}, piece.mobility);
     // Moves/Captures in Forward Direction so up for White
     // Move/Capture : [up, (right (+), left (-))]
@@ -113,165 +103,11 @@ function initMobility(piece){
     piece.mobility = Object.assign({}, currMob);
   }
 }
-
-function updateMobility(piece){
-  if(!(piece instanceof Piece)){
-    console.log("updateMobility revieced a Object that wasn't a peice");
-  }
-  if(piece instanceof Pawn){
-    // console.log("Pawn!");
-    let dir = (piece.color === 'w' ? 1 : -1);
-    let newMob = createEmptyBoard();
-    // Moves/Captures in Forward Direction so up for White
-    // Move/Capture : [up, (right (+), left (-))]
-    let moves = [
-      [1 * dir, 0]]
-    let captures = [
-      [1 * dir, -1],
-      [1 * dir, 1]];
-    // console.log(piece.location);
-    moves.forEach(function (move) {
-      let newMove = isValidBoardPostion(move, piece.location);
-      if(newMove !== null){
-        // console.log('\t' + newMove);
-        newMob[newMove] = MOVE;
-      }
-    });
-    captures.forEach(function (capture) {
-      let newCap = isValidBoardPostion(capture, piece.location);
-      if(newCap !== null){
-        // console.log('\t' + newCap);
-        newMob[newCap] = CAPTURE;
-      }
-    });
-    // console.log(newMob);
-    piece.mobility = Object.assign({}, newMob);
-
-  } else if(piece instanceof Rook){
-    // console.log("Rook!");
-    let newMob = createEmptyBoard();
-    // Moves/Captures in Forward Direction so up for White
-    // Move/Capture : [up, (right (+), left (-))]
-    let captures = [
-      [1, 0],
-      [-1, 0],
-      [0, 1],
-      [0, -1]];
-    // console.log(piece.location);
-    captures.forEach(function (capture) {
-      let newCap = isValidBoardPostion(capture, piece.location);
-      while(newCap !== null){
-        // console.log('\t' + newCap);
-        newMob[newCap] = CAPTURE;
-        newCap = isValidBoardPostion(capture, newCap);
-      }
-    });
-    // console.log(newMob);
-    piece.mobility = Object.assign({}, newMob);
-
-  } else if(piece instanceof Knight){
-    // console.log("Knight!");
-    let newMob = createEmptyBoard();
-    // Moves/Captures in Forward Direction so up for White
-    // Move/Capture : [up, (right (+), left (-))]
-    let captures = [
-      [2, -1],
-      [2, 1],
-      [1, 2],
-      [1, -2],
-      [-2, -1],
-      [-2, 1],
-      [-1, 2],
-      [-1, -2]];
-    // console.log(piece.location);
-    captures.forEach(function (capture) {
-      let newCap = isValidBoardPostion(capture, piece.location);
-      if(newCap !== null){
-        // console.log('\t' + newCap);
-        newMob[newCap] = CAPTURE;
-      }
-    });
-    // console.log(newMob);
-    piece.mobility = Object.assign({}, newMob);
-
-  } else if(piece instanceof Bishop){
-    // console.log("Bishop!");
-    let newMob = createEmptyBoard();
-    // Moves/Captures in Forward Direction so up for White
-    // Move/Capture : [up, (right (+), left (-))]
-    let captures = [
-      [1, 1],
-      [-1, 1],
-      [1, -1],
-      [-1, -1]];
-    // console.log(piece.location);
-    captures.forEach(function (capture) {
-      let newCap = isValidBoardPostion(capture, piece.location);
-      while(newCap !== null){
-        // console.log('\t' + newCap);
-        newMob[newCap] = CAPTURE;
-        newCap = isValidBoardPostion(capture, newCap);
-      }
-    });
-    // console.log(newMob);
-    piece.mobility = Object.assign({}, newMob);
-
-  } else if(piece instanceof Queen){
-    // console.log("Queen!");
-    let newMob = createEmptyBoard();
-    // Moves/Captures in Forward Direction so up for White
-    // Move/Capture : [up, (right (+), left (-))]
-    let captures = [
-      [1, 0],
-      [-1, 0],
-      [0, 1],
-      [0, -1],
-      [1, 1],
-      [-1, 1],
-      [1, -1],
-      [-1, -1]];
-    // console.log(piece.location);
-    captures.forEach(function (capture) {
-      let newCap = isValidBoardPostion(capture, piece.location);
-      while(newCap !== null){
-        // console.log('\t' + newCap);
-        newMob[newCap] = CAPTURE;
-        newCap = isValidBoardPostion(capture, newCap);
-      }
-    });
-    // console.log(newMob);
-    piece.mobility = Object.assign({}, newMob);
-
-  } else if(piece instanceof King){
-    // console.log("King!");
-    let newMob = createEmptyBoard();
-    // Moves/Captures in Forward Direction so up for White
-    // Move/Capture : [up, (right (+), left (-))]
-    let captures = [
-      [1, 0],
-      [-1, 0],
-      [0, 1],
-      [0, -1],
-      [1, 1],
-      [-1, 1],
-      [1, -1],
-      [-1, -1]];
-    // console.log(piece.location);
-    captures.forEach(function (capture) {
-      let newCap = isValidBoardPostion(capture, piece.location);
-      if(newCap !== null){
-        // console.log('\t' + newCap);
-        newMob[newCap] = CAPTURE;
-      }
-    });
-    // console.log(newMob);
-    piece.mobility = Object.assign({}, newMob);
-
-  }
-}
 // END PIECES
 
 export {
-  initMobility,
-  updateMobility
+  CAPTURE,
+  MOVE,
+  createEmptyBoard,
+  isValidBoardPostion,
 }
