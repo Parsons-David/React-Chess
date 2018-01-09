@@ -15,8 +15,8 @@ import wr from './img/wr.png';
 
 // UTIL IMPORTS
 import {
-  CAPTURE,
   MOVE,
+  ATTACK,
   createEmptyBoard,
   isValidBoardPostion,
 } from './utils.js';
@@ -45,8 +45,8 @@ class Pawn extends Piece{
     this.src = (color === 'b' ? bp : wp );
     const dir = (color === 'b' ? -1 : 1 );
     this.moves = [
-      {rank: dir * 1, file: -1, type: CAPTURE, unlimited: false},
-      {rank: dir * 1, file: 1, type: CAPTURE, unlimited: false},
+      {rank: dir * 1, file: -1, type: ATTACK, unlimited: false},
+      {rank: dir * 1, file: 1, type: ATTACK, unlimited: false},
       {rank: dir * 1, file: 0, type: MOVE, unlimited: false}];
   }
 }
@@ -58,10 +58,10 @@ class Rook extends Piece{
     this.src = (color === 'b' ? br : wr );
     const dir = (color === 'b' ? -1 : 1 );
     this.moves = [
-      {rank: dir * 1, file: 0, type: CAPTURE, unlimited: true},
-      {rank: dir * -1, file: 0, type: CAPTURE, unlimited: true},
-      {rank: dir * 0, file: 1, type: CAPTURE, unlimited: true},
-      {rank: dir * 0, file: -1, type: CAPTURE, unlimited: true}];
+      {rank: dir * 1, file: 0, type: ATTACK, unlimited: true},
+      {rank: dir * -1, file: 0, type: ATTACK, unlimited: true},
+      {rank: dir * 0, file: 1, type: ATTACK, unlimited: true},
+      {rank: dir * 0, file: -1, type: ATTACK, unlimited: true}];
   }
 }
 
@@ -71,10 +71,10 @@ class Bishop extends Piece{
     this.src = (color === 'b' ? bb : wb );
     const dir = (color === 'b' ? -1 : 1 );
     this.moves = [
-      {rank: dir * 1, file: 1, type: CAPTURE, unlimited: true},
-      {rank: dir * -1, file: 1, type: CAPTURE, unlimited: true},
-      {rank: dir * 1, file: -1, type: CAPTURE, unlimited: true},
-      {rank: dir * -1, file: -1, type: CAPTURE, unlimited: true}];
+      {rank: dir * 1, file: 1, type: ATTACK, unlimited: true},
+      {rank: dir * -1, file: 1, type: ATTACK, unlimited: true},
+      {rank: dir * 1, file: -1, type: ATTACK, unlimited: true},
+      {rank: dir * -1, file: -1, type: ATTACK, unlimited: true}];
   }
 }
 
@@ -84,14 +84,14 @@ class Knight extends Piece{
     this.src = (color === 'b' ? bn : wn );
     const dir = (color === 'b' ? -1 : 1 );
     this.moves = [
-      {rank: dir * 2, file: -1, type: CAPTURE, unlimited: false},
-      {rank: dir * 2, file: 1, type: CAPTURE, unlimited: false},
-      {rank: dir * 1, file: 2, type: CAPTURE, unlimited: false},
-      {rank: dir * 1, file: -2, type: CAPTURE, unlimited: false},
-      {rank: dir * -2, file: -1, type: CAPTURE, unlimited: false},
-      {rank: dir * -2, file: 1, type: CAPTURE, unlimited: false},
-      {rank: dir * -1, file: 2, type: CAPTURE, unlimited: false},
-      {rank: dir * -1, file: -2, type: CAPTURE, unlimited: false}];
+      {rank: dir * 2, file: -1, type: ATTACK, unlimited: false},
+      {rank: dir * 2, file: 1, type: ATTACK, unlimited: false},
+      {rank: dir * 1, file: 2, type: ATTACK, unlimited: false},
+      {rank: dir * 1, file: -2, type: ATTACK, unlimited: false},
+      {rank: dir * -2, file: -1, type: ATTACK, unlimited: false},
+      {rank: dir * -2, file: 1, type: ATTACK, unlimited: false},
+      {rank: dir * -1, file: 2, type: ATTACK, unlimited: false},
+      {rank: dir * -1, file: -2, type: ATTACK, unlimited: false}];
   }
 
   // Special Cause the way it moves
@@ -106,14 +106,14 @@ class Queen extends Piece{
     this.src = (color === 'b' ? bq : wq );
     const dir = (color === 'b' ? -1 : 1 );
     this.moves = [
-      {rank: dir * 1, file: 0, type: CAPTURE, unlimited: true},
-      {rank: dir * -1, file: 0, type: CAPTURE, unlimited: true},
-      {rank: dir * 0, file: 1, type: CAPTURE, unlimited: true},
-      {rank: dir * 0, file: -1, type: CAPTURE, unlimited: true},
-      {rank: dir * 1, file: 1, type: CAPTURE, unlimited: true},
-      {rank: dir * -1, file: 1, type: CAPTURE, unlimited: true},
-      {rank: dir * 1, file: -1, type: CAPTURE, unlimited: true},
-      {rank: dir * -1, file: -1, type: CAPTURE, unlimited: true}];
+      {rank: dir * 1, file: 0, type: ATTACK, unlimited: true},
+      {rank: dir * -1, file: 0, type: ATTACK, unlimited: true},
+      {rank: dir * 0, file: 1, type: ATTACK, unlimited: true},
+      {rank: dir * 0, file: -1, type: ATTACK, unlimited: true},
+      {rank: dir * 1, file: 1, type: ATTACK, unlimited: true},
+      {rank: dir * -1, file: 1, type: ATTACK, unlimited: true},
+      {rank: dir * 1, file: -1, type: ATTACK, unlimited: true},
+      {rank: dir * -1, file: -1, type: ATTACK, unlimited: true}];
   }
 }
 
@@ -123,14 +123,14 @@ class King extends Piece{
     this.src = (color === 'b' ? bk : wk );
     const dir = (color === 'b' ? -1 : 1 );
     this.moves = [
-      {rank: dir * 1, file: 0, type: CAPTURE, unlimited: false},
-      {rank: dir * -1, file: 0, type: CAPTURE, unlimited: false},
-      {rank: dir * 0, file: 1, type: CAPTURE, unlimited: false},
-      {rank: dir * 0, file: -1, type: CAPTURE, unlimited: false},
-      {rank: dir * 1, file: 1, type: CAPTURE, unlimited: false},
-      {rank: dir * -1, file: 1, type: CAPTURE, unlimited: false},
-      {rank: dir * 1, file: -1, type: CAPTURE, unlimited: false},
-      {rank: dir * -1, file: -1, type: CAPTURE, unlimited: false}];
+      {rank: dir * 1, file: 0, type: ATTACK, unlimited: false},
+      {rank: dir * -1, file: 0, type: ATTACK, unlimited: false},
+      {rank: dir * 0, file: 1, type: ATTACK, unlimited: false},
+      {rank: dir * 0, file: -1, type: ATTACK, unlimited: false},
+      {rank: dir * 1, file: 1, type: ATTACK, unlimited: false},
+      {rank: dir * -1, file: 1, type: ATTACK, unlimited: false},
+      {rank: dir * 1, file: -1, type: ATTACK, unlimited: false},
+      {rank: dir * -1, file: -1, type: ATTACK, unlimited: false}];
   }
 
   // Special Cause Casstle

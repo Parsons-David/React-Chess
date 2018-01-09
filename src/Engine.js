@@ -3,6 +3,8 @@ import {
   initMobility,
   updateMobility,
   CAPTURE,
+  ATTACK,
+  MOVE,
   createEmptyBoard,
   isValidBoardPostion,
 } from './utils.js';
@@ -58,7 +60,10 @@ class Engine{
             mobility[newMob] = move.type;
           // Encountered Enemy Piece
           } else if(board.pieces[newMob].color !== piece.color) {
-            mobility[newMob] = move.type;
+            // MUST BE ABLE TO ATTACK ENEMY IN ORDER TO CAPTURE IT
+            if(move.type === ATTACK) {
+              mobility[newMob] = CAPTURE;
+            }
             break;
           // Encountered Friendly Piece
           } else {

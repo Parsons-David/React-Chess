@@ -11,6 +11,7 @@ import {
 // CONSTANTS
 const MOVE = 'move';
 const CAPTURE = 'cap';
+const ATTACK = 'atak';
 const EN_PASSANT_SETUP = 'eps';
 const EN_PASSANT_CAPTURE = 'epc';
 const CASTLE = 'casl';
@@ -108,6 +109,7 @@ function initMobility(piece){
 export {
   CAPTURE,
   MOVE,
+  ATTACK,
   createEmptyBoard,
   isValidBoardPostion,
 }
