@@ -1,5 +1,4 @@
 import {
-  Piece,
   Pawn,
   Rook,
   Knight,

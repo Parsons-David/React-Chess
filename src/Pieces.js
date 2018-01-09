@@ -20,8 +20,6 @@ import {
   EN_PASSANT_SETUP,
   EN_PASSANT_CAPTURE,
   CAPTURE,
-  createEmptyBoard,
-  isValidBoardPostion,
 } from './utils.js';
 // END UTIL IMPORTS
 

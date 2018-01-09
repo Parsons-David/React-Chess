@@ -3,14 +3,6 @@ import ReactDOM from 'react-dom';
 import {Engine} from './Engine.js'
 import './index.css';
 
-function createEmptyBoard(){
-  let tmpBoard = [];
-  for(var i = 0; i < 8; i++){
-    tmpBoard.push(Array(8).fill(null));
-  }
-  return tmpBoard;
-}
-
 function Square(props) {
   // console.log(props);
   let classes = "Square";

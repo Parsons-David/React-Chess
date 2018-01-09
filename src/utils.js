@@ -69,41 +69,6 @@ function locationToPos(location){
 // END BOARD
 
 // PIECES
-function initMobility(piece){
-  if(!(piece instanceof Piece)){
-    console.log("updateMobility revieced a Object that wasn't a peice");
-  }
-  if(piece instanceof Pawn){
-    let dir = (piece.color === 'w' ? 1 : -1);
-    let currMob = Object.assign({}, piece.mobility);
-    // Moves/Captures in Forward Direction so up for White
-    // Move/Capture : [up, (right (+), left (-))]
-    let eps = [2 * dir, 0];
-    let newMove = isValidBoardPostion(eps, piece.location);
-    if(newMove !== null){
-      // console.log('\t' + newMove);
-      currMob[newMove] = MOVE;
-    }
-    // console.log(newMob);
-    piece.mobility = Object.assign({}, currMob);
-
-  } else if(piece instanceof King){
-    let currMob = Object.assign({}, piece.mobility);
-    // Moves/Captures in Forward Direction so up for White
-    // Move/Capture : [up, (right (+), left (-))]
-    let castles = [
-      [0, 2],
-      [0, -2]];
-    castles.forEach(function (castle) {
-      let newMove = isValidBoardPostion(castle, piece.location);
-      if(newMove !== null){
-        // console.log('\t' + newMove);
-        currMob[newMove] = MOVE;
-      }
-    });
-    piece.mobility = Object.assign({}, currMob);
-  }
-}
 // END PIECES
 
 export {

@@ -1,8 +1,6 @@
 import {Board} from './Board.js'
 import {King, Pawn, Rook} from './Pieces.js'
 import {
-  initMobility,
-  updateMobility,
   CAPTURE,
   ATTACK,
   MOVE,
